@@ -21,13 +21,13 @@ def main():
     st.title("Sales Prediction App")
 
     # Define input fields for user input
-    Item_MPR = st.number_input("Item MRP", min_value=0.0, max_value=1000.0, value=0.0, step=0.1)
-    Outlet_type = st.number_input("Outlet Type", min_value=0.0, max_value=5.0, value=0.0, step=1.0)
-    Outlet_identifier = st.number_input("Outlet Identifier", min_value=0.0, max_value=50.0, value=0.0, step=1.0)
-    Outlet_size = st.number_input("Outlet Size", min_value=0.0, max_value=5.0, value=0.0, step=1.0)
-    Item_visibility = st.number_input("Item Visibility", min_value=0.0, max_value=1.0, value=0.0, step=0.01)
-    Outlet_location_type = st.number_input("Outlet Location Type", min_value=0.0, max_value=5.0, value=0.0, step=1.0)
-    Outlet_established_year = st.number_input("Outlet Established Year", min_value=1900, max_value=2024, value=2000, step=1)
+    Item_MPR = st.number_input("Item MRP")
+    Outlet_type = st.number_input("Outlet Type")
+    Outlet_identifier = st.number_input("Outlet Identifier")
+    Outlet_size = st.number_input("Outlet Size")
+    Item_visibility = st.number_input("Item Visibility")
+    Outlet_location_type = st.number_input("Outlet Location Type")
+    Outlet_established_year = st.number_input("Outlet Established Year")
 
     # When the user clicks the 'Predict' button, make the prediction
     if st.button("Predict"):
