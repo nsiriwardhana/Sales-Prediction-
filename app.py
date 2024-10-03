@@ -23,24 +23,88 @@ def predict_sales(input_data):
     return original_prediction
 
 # Set up the Streamlit app
-st.title('Big Mart Sales Prediction')
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                    url("https://static.vecteezy.com/system/resources/thumbnails/021/935/373/small_2x/supermarket-aisle-perspective-view-free-vector.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    
+    .title {
+        color: white; /* Change title font color to white */
+        font-size: 36px; /* Adjust font size if needed */
+        text-align: center; /* Center the title */
+    }
+
+    .input-label {
+        color: white; /* Change input label color to white */
+        font-weight: bold; /* Make input label bold */
+        display: block; /* Ensure label occupies a whole line */
+        margin-top: 20px; /* Add some space above each label */
+    }
+
+    .prediction-output {
+        color: #FFD700; /* Gold color for the output */
+        font-size: 24px; /* Adjust font size for the output */
+        font-weight: bold; /* Make output bold */
+        text-align: center; /* Center the output */
+        margin-top: 30px; /* Add space above the output */
+    }
+
+    .feedback-message {
+        color: white; /* Color for the feedback message */
+        font-size: 18px; /* Font size for the feedback message */
+        text-align: center; /* Center the message */
+        margin-top: 20px; /* Space above the feedback message */
+    }
+
+    .stButton > button {
+        background-color: #4CAF50;
+        color: white;
+        font-size: 18px;
+        padding: 10px 24px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .stButton > button:hover {
+        background-color: #45a049;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Title with custom class for styling
+st.markdown('<h1 class="title">Big Mart Sales Prediction</h1>', unsafe_allow_html=True)
 
 # Create a form for user input
 with st.form("prediction_form"):
-    # Input fields for the selected features
-    Item_MRP = st.number_input('Item MRP', min_value=0.0, max_value=300.0, value=100.0)
-    
-    Outlet_Type = st.selectbox('Outlet Type', ['Grocery Store', 'Supermarket Type1', 'Supermarket Type2', 'Supermarket Type3'])
-    Outlet_Identifier = st.selectbox('Outlet Identifier', ['OUT010', 'OUT013', 'OUT017', 'OUT018', 'OUT019', 'OUT027', 'OUT035', 'OUT045', 'OUT046', 'OUT049'])
-    
-    Outlet_Size = st.selectbox('Outlet Size', ['Small', 'Medium', 'High'])
-    
-    Item_Visibility_Interpolate = st.number_input('Item Visibility Interpolate', min_value=0.0, max_value=1.0, value=0.05)
-    
-    Outlet_Location_Type = st.selectbox('Outlet Location Type', ['Tier 1', 'Tier 2', 'Tier 3'])
-    
-    Outlet_Age = st.number_input('Outlet Age', min_value=0, max_value=50, value=10)
-    
+    # Custom markdown labels for the selected features
+    st.markdown('<span class="input-label">Item MRP</span>', unsafe_allow_html=True)
+    Item_MRP = st.number_input('', min_value=0.0, max_value=300.0, value=100.0)
+
+    st.markdown('<span class="input-label">Outlet Type</span>', unsafe_allow_html=True)
+    Outlet_Type = st.selectbox('', ['Grocery Store', 'Supermarket Type1', 'Supermarket Type2', 'Supermarket Type3'])
+
+    st.markdown('<span class="input-label">Outlet Identifier</span>', unsafe_allow_html=True)
+    Outlet_Identifier = st.selectbox('', ['OUT010', 'OUT013', 'OUT017', 'OUT018', 'OUT019', 'OUT027', 'OUT035', 'OUT045', 'OUT046', 'OUT049'])
+
+    st.markdown('<span class="input-label">Outlet Size</span>', unsafe_allow_html=True)
+    Outlet_Size = st.selectbox('', ['Small', 'Medium', 'High'])
+
+    st.markdown('<span class="input-label">Item Visibility Interpolate</span>', unsafe_allow_html=True)
+    Item_Visibility_Interpolate = st.number_input('', min_value=0.0, max_value=1.0, value=0.05)
+
+    st.markdown('<span class="input-label">Outlet Location Type</span>', unsafe_allow_html=True)
+    Outlet_Location_Type = st.selectbox('', ['Tier 1', 'Tier 2', 'Tier 3'])
+
+    st.markdown('<span class="input-label">Outlet Age</span>', unsafe_allow_html=True)
+    Outlet_Age = st.number_input('', min_value=0, max_value=50, value=10)
+
     # Submit button
     submitted = st.form_submit_button("Predict")
 
@@ -65,8 +129,13 @@ if submitted:
     # Predict sales using the model and apply the inverse Box-Cox transformation
     original_prediction = predict_sales(input_data)
     
-    # Display the original sales prediction
-    st.write(f"Predicted Sales: {original_prediction:.2f}")
+    # Display the original sales prediction with customized style
+    st.markdown(f'<p class="prediction-output">Predicted Sales: {original_prediction:.2f}</p>', unsafe_allow_html=True)
     
-    # Show balloons
-    st.balloons()
+    # Display feedback message
+    st.markdown('<p class="feedback-message">Thank you for using the Big Mart Sales Prediction tool!</p>', unsafe_allow_html=True)
+
+    # Reset button
+    if st.button('Reset'):
+        st.session_state.clear()  # Clear the session state to reset the app
+
