@@ -44,26 +44,29 @@ with st.form("prediction_form"):
     # Submit button
     submitted = st.form_submit_button("Predict")
 
-    if submitted:
-        # Convert categorical inputs to numerical values using mappings
-        Outlet_Type_encoded = outlet_type_mapping[Outlet_Type]
-        Outlet_Identifier_encoded = outlet_identifier_mapping[Outlet_Identifier]
-        Outlet_Size_encoded = outlet_size_mapping[Outlet_Size]
-        Outlet_Location_Type_encoded = outlet_location_type_mapping[Outlet_Location_Type]
+if submitted:
+    # Convert categorical inputs to numerical values using mappings
+    Outlet_Type_encoded = outlet_type_mapping[Outlet_Type]
+    Outlet_Identifier_encoded = outlet_identifier_mapping[Outlet_Identifier]
+    Outlet_Size_encoded = outlet_size_mapping[Outlet_Size]
+    Outlet_Location_Type_encoded = outlet_location_type_mapping[Outlet_Location_Type]
 
-        # Gather input data into a list with encoded categorical variables
-        input_data = [
-            Item_MRP,
-            Outlet_Type_encoded,
-            Outlet_Identifier_encoded,
-            Outlet_Size_encoded,
-            Item_Visibility_Interpolate,
-            Outlet_Location_Type_encoded,
-            Outlet_Age
-        ]
-        
-        # Predict sales using the model and apply the inverse Box-Cox transformation
-        original_prediction = predict_sales(input_data)
-        
-        # Display the original sales prediction
-        st.write(f"Predicted Sales: {original_prediction:.2f}")
+    # Gather input data into a list with encoded categorical variables
+    input_data = [
+        Item_MRP,
+        Outlet_Type_encoded,
+        Outlet_Identifier_encoded,
+        Outlet_Size_encoded,
+        Item_Visibility_Interpolate,
+        Outlet_Location_Type_encoded,
+        Outlet_Age
+    ]
+    
+    # Predict sales using the model and apply the inverse Box-Cox transformation
+    original_prediction = predict_sales(input_data)
+    
+    # Display the original sales prediction
+    st.write(f"Predicted Sales: {original_prediction:.2f}")
+    
+    # Show balloons
+    st.balloons()
