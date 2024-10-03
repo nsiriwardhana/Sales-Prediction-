@@ -1,42 +1,49 @@
 import streamlit as st
 import numpy as np
-import pickle
-import os
+import joblib
+from scipy.special import inv_boxcox
 
-# Ensure that the model file is correctly located
-model_path = os.path.join(os.path.dirname(__file__), 'model.pkl')
+# Load the saved model and lambda value
+model = joblib.load('model.pkl')
+fitted_lambda = 0.37327999892652647  # Replace with the actual lambda value used in your Box-Cox transformation
 
-# Load the model
-try:
-    with open(model_path, 'rb') as file:
-        model = pickle.load(file)
-except FileNotFoundError:
-    st.error(f"Model file not found at {model_path}. Please ensure the file is present.")
-except Exception as e:
-    st.error(f"An error occurred while loading the model: {e}")
+# Define categorical mappings
+outlet_type_mapping = {'Grocery Store': 0, 'Supermarket Type1': 1, 'Supermarket Type2': 2, 'Supermarket Type3': 3}
+outlet_size_mapping = {'Small': 0, 'Medium': 1, 'High': 2}
+outlet_location_type_mapping = {'Tier 1': 0, 'Tier 2': 1, 'Tier 3': 2}
+outlet_identifier_mapping = {'OUT010': 0, 'OUT013': 1, 'OUT017': 2, 'OUT018': 3, 'OUT019': 4, 'OUT027': 5, 'OUT035': 6, 'OUT045': 7, 'OUT046': 8, 'OUT049': 9}
 
-# Streamlit app
-def main():
-    # Set the title of the app
-    st.title("Sales Prediction App")
+# Define the function to make predictions
+def predict_sales(input_data):
+    input_array = np.array(input_data).reshape(1, -1)
+    transformed_prediction = model.predict(input_array)[0]
+    
+    # Apply the inverse Box-Cox transformation to get the original sales prediction
+    original_prediction = inv_boxcox(transformed_prediction, fitted_lambda)
+    return original_prediction
 
-    # Define input fields for user input
-    Item_MPR = st.number_input("Item MRP")
-    Outlet_type = st.number_input("Outlet Type")
-    Outlet_identifier = st.number_input("Outlet Identifier")
-    Outlet_size = st.number_input("Outlet Size")
-    Item_visibility = st.number_input("Item Visibility")
-    Outlet_location_type = st.number_input("Outlet Location Type")
-    Outlet_established_year = st.number_input("Outlet Established Year")
+# Set up the Streamlit app
+st.title('Big Mart Sales Prediction')
 
-    # When the user clicks the 'Predict' button, make the prediction
-    if st.button("Predict"):
-        # Check if the model is loaded
-        if 'model' in globals():
-            # Create a numpy array of the inputs
-            features = np.array([[Item_MPR, Outlet_type, Outlet_identifier, Outlet_size, Item_visibility, Outlet_location_type, Outlet_established_year]], dtype=np.float32)
+# Create a form for user input
+with st.form("prediction_form"):
+    # Input fields for the selected features
+    Item_MRP = st.number_input('Item MRP', min_value=0.0, max_value=300.0, value=100.0)
+    
+    Outlet_Type = st.selectbox('Outlet Type', ['Grocery Store', 'Supermarket Type1', 'Supermarket Type2', 'Supermarket Type3'])
+    Outlet_Identifier = st.selectbox('Outlet Identifier', ['OUT010', 'OUT013', 'OUT017', 'OUT018', 'OUT019', 'OUT027', 'OUT035', 'OUT045', 'OUT046', 'OUT049'])
+    
+    Outlet_Size = st.selectbox('Outlet Size', ['Small', 'Medium', 'High'])
+    
+    Item_Visibility_Interpolate = st.number_input('Item Visibility Interpolate', min_value=0.0, max_value=1.0, value=0.05)
+    
+    Outlet_Location_Type = st.selectbox('Outlet Location Type', ['Tier 1', 'Tier 2', 'Tier 3'])
+    
+    Outlet_Age = st.number_input('Outlet Age', min_value=0, max_value=50, value=10)
+    
+    # Submit button
+    submitted = st.form_submit_button("Predict")
 
-<<<<<<< Updated upstream
 if submitted:
     # Convert categorical inputs to numerical values using mappings
     Outlet_Type_encoded = outlet_type_mapping[Outlet_Type]
@@ -63,17 +70,3 @@ if submitted:
     
     # Show balloons
     st.balloons()
-=======
-            # Predict using the loaded model
-            try:
-                prediction = model.predict(features)[0]
-                # Display the prediction
-                st.success(f"The predicted sales value is: {prediction:.2f}")
-            except Exception as e:
-                st.error(f"An error occurred during prediction: {e}")
-        else:
-            st.error("Model not loaded. Please check if the model file is in the correct directory.")
-
-if __name__ == '__main__':
-    main()
->>>>>>> Stashed changes
