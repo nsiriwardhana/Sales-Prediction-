@@ -35,46 +35,56 @@ st.markdown(
     }
     
     .title {
-        color: white; /* Change title font color to white */
-        font-size: 36px; /* Adjust font size if needed */
-        text-align: center; /* Center the title */
+        color: white;
+        font-size: 36px;
+        text-align: center;
     }
 
     .input-label {
-        color: white; /* Change input label color to white */
-        font-weight: bold; /* Make input label bold */
-        display: block; /* Ensure label occupies a whole line */
-        margin-top: 20px; /* Add some space above each label */
+        color: white;
+        font-weight: bold;
+        display: block;
+        margin-top: 20px;
+        font-size: 22px;
     }
 
     .prediction-output {
-        color: #FFD700; /* Gold color for the output */
-        font-size: 24px; /* Adjust font size for the output */
-        font-weight: bold; /* Make output bold */
-        text-align: center; /* Center the output */
-        margin-top: 30px; /* Add space above the output */
+        color: #FFD700;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 30px;
     }
 
     .feedback-message {
-        color: white; /* Color for the feedback message */
-        font-size: 18px; /* Font size for the feedback message */
-        text-align: center; /* Center the message */
-        margin-top: 20px; /* Space above the feedback message */
+        color: white;
+        font-size: 18px;
+        text-align: center;
+        margin-top: 20px;
     }
 
     .stButton > button {
         background-color: #4CAF50;
         color: white;
-        font-size: 18px;
+        font-weight: bold;
+        font-size: 20px;
         padding: 10px 24px;
         border-radius: 12px;
         border: none;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        width: 100%;
     }
+
     .stButton > button:hover {
         background-color: #45a049;
     }
+
+    .stButton > button:active {
+        background-color: #3e8e41;
+        color: white; /* Ensure font color remains white on click */
+    }
+
     </style>
     """, unsafe_allow_html=True)
 
@@ -105,7 +115,7 @@ with st.form("prediction_form"):
     st.markdown('<span class="input-label">Outlet Age</span>', unsafe_allow_html=True)
     Outlet_Age = st.number_input('', min_value=0, max_value=50, value=10)
 
-    # Submit button
+    # Submit button with full width
     submitted = st.form_submit_button("Predict")
 
 if submitted:
@@ -138,4 +148,3 @@ if submitted:
     # Reset button
     if st.button('Reset'):
         st.session_state.clear()  # Clear the session state to reset the app
-
